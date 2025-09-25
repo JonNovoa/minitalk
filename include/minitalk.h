@@ -7,9 +7,11 @@
 # include <signal.h>
 # include <ft_printf.h>
 # include <libft.h>
+# include <limits.h> 
 
+# define OVER 4
 
 void	handle_server(int signal, siginfo_t *info, void *context);
 void	send_char(pid_t pid_server, char c);
-void handler_client(int signal);
+void	handler_client(int signal);
 #endif

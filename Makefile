@@ -1,54 +1,52 @@
-NAME_SERVER = server
-NAME_CLIENT = client
+# **************************************************************************** #
+#                                   MAKEFILE                                   #
+# **************************************************************************** #
 
-CC = cc
-CFLAGS = -Wall -Wextra -Werror
-INCLUDES = -I./include -I./libft -I./ft_printf
+NAME_CLIENT = client
+NAME_SERVER = server
 
 SRC_DIR = src
-SRCS_SERVER = $(SRC_DIR)/server.c
-SRCS_CLIENT = $(SRC_DIR)/client.c
+INC_DIR = include
 
-OBJS_SERVER = $(SRCS_SERVER:.c=.o)
-OBJS_CLIENT = $(SRCS_CLIENT:.c=.o)
+SRC_CLIENT = $(SRC_DIR)/client.c
+SRC_SERVER = $(SRC_DIR)/server.c
 
-LIBFT = libft/libft.a
-FTPRINTF = ft_printf/libftprintf.a
+OBJ_CLIENT = $(SRC_CLIENT:.c=.o)
+OBJ_SERVER = $(SRC_SERVER:.c=.o)
 
-# ---------------------- REGLAS PRINCIPALES ---------------------- #
+LIBFT_DIR = libft
+PRINTF_DIR = ft_printf
 
-all: $(NAME_SERVER) $(NAME_CLIENT)
+LIBFT = $(LIBFT_DIR)/libft.a
+PRINTF = $(PRINTF_DIR)/libftprintf.a
 
-# Compila servidor
-$(NAME_SERVER): $(OBJS_SERVER) $(LIBFT) $(FTPRINTF)
-	$(CC) $(CFLAGS) $(OBJS_SERVER) $(LIBFT) $(FTPRINTF) -o $(NAME_SERVER)
+CC = cc
+CFLAGS = -Wall -Wextra -Werror -I$(INC_DIR) -I$(LIBFT_DIR) -I$(PRINTF_DIR)
 
-# Compila cliente
-$(NAME_CLIENT): $(OBJS_CLIENT) $(LIBFT) $(FTPRINTF)
-	$(CC) $(CFLAGS) $(OBJS_CLIENT) $(LIBFT) $(FTPRINTF) -o $(NAME_CLIENT)
-
-# Compila objetos genéricos
-%.o: %.c
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
-
-# ---------------------- LIBS ---------------------- #
+all: $(NAME_CLIENT) $(NAME_SERVER)
 
 $(LIBFT):
-	$(MAKE) -C libft
+	$(MAKE) -C $(LIBFT_DIR)
 
-$(FTPRINTF):
-	$(MAKE) -C ft_printf
+$(PRINTF):
+	$(MAKE) -C $(PRINTF_DIR)
 
-# ---------------------- LIMPIEZA ---------------------- #
+$(NAME_CLIENT): $(OBJ_CLIENT) $(LIBFT) $(PRINTF)
+	$(CC) $(CFLAGS) $(OBJ_CLIENT) $(LIBFT) $(PRINTF) -o $(NAME_CLIENT)
+
+$(NAME_SERVER): $(OBJ_SERVER) $(LIBFT) $(PRINTF)
+	$(CC) $(CFLAGS) $(OBJ_SERVER) $(LIBFT) $(PRINTF) -o $(NAME_SERVER)
 
 clean:
-	rm -f $(OBJS_SERVER) $(OBJS_CLIENT)
-	$(MAKE) -C libft clean
-	$(MAKE) -C ft_printf clean
+	$(MAKE) clean -C $(LIBFT_DIR)
+	$(MAKE) clean -C $(PRINTF_DIR)
+	rm -f $(OBJ_CLIENT) $(OBJ_SERVER)
 
 fclean: clean
-	rm -f $(NAME_SERVER) $(NAME_CLIENT)
-	$(MAKE) -C libft fclean
-	$(MAKE) -C ft_printf fclean
+	$(MAKE) fclean -C $(LIBFT_DIR)
+	$(MAKE) fclean -C $(PRINTF_DIR)
+	rm -f $(NAME_CLIENT) $(NAME_SERVER)
 
 re: fclean all
+
+.PHONY: all clean fclean re

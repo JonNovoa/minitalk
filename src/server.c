@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jnovoa-a <jnovoa-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jon <jon@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 17:13:10 by jnovoa-a          #+#    #+#             */
-/*   Updated: 2025/09/24 18:55:48 by jnovoa-a         ###   ########.fr       */
+/*   Updated: 2025/09/25 14:56:02 by jon              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	main(void)
 
 	sa.sa_sigaction = handle_server;
 	sa.sa_flags = SA_SIGINFO;
-	sigempty(&sa.sa_mask);
+	sigemptyset(&sa.sa_mask);
 	ft_printf("Server ' s PID is: %i\n", getpid());
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
